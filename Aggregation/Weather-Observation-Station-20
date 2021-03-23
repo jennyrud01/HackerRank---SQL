@@ -1,0 +1,16 @@
+-- Weather Observation Station Problem 20 - Median of Northern Latitude
+-- https://www.hackerrank.com/challenges/weather-observation-station-20/problem
+
+WITH CTE AS
+(SELECT LAT_N
+,HALF1
+,HALF2
+FROM 
+(SELECT LAT_N
+,NTILE(2) OVER (ORDER BY LAT_N) HALF1
+,NTILE(2) OVER (ORDER BY LAT_N DESC) HALF2
+FROM STATION
+) TM
+)
+SELECT ROUND((MAX(CASE WHEN HALF1 = 1 THEN LAT_N END) + MIN(CASE WHEN HALF2 = 1 THEN LAT_N END)) / 2.0, 4) AS MEDIAN_LAT
+FROM CTE
